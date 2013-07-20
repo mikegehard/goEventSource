@@ -10,6 +10,8 @@ Please write tests for any code that you add. To run existing tests, run:
 
 ## References
 
+See `src/main.go` for an example of how to use this library.
+
 For more information about SSE/EventSource, see:
 
 [http://en.wikipedia.org/wiki/Server-sent_events](http://en.wikipedia.org/wiki/Server-sent_events)
