@@ -1,0 +1,2 @@
+go fmt github.com/msgehard/eventsource
+go test github.com/msgehard/eventsource
