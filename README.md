@@ -1,5 +1,7 @@
 # EventSource for Go
-This library is an initial implementation of Server Sent Events(SSE)/EventSource for Go. It is very much a work in progress. Pull requests welcome.
+This library is an initial implementation of Server Sent Events(SSE)/EventSource for Go.
+It is patterned after the [Go Websockets](https://code.google.com/p/go/source/browse/?repo=net#hg%2Fwebsocket) library.
+It is very much a work in progress. Pull requests welcome.
 
 ## Development
 Please write tests for any code that you add. To run existing tests, run:
