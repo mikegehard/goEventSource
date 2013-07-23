@@ -1,4 +1,4 @@
-# EventSource for Go
+# EventSource for Go [![Build Status](https://travis-ci.org/msgehard/goEventSource.png?branch=master)](https://travis-ci.org/msgehard/goEventSource)
 This library is an initial implementation of Server Sent Events(SSE)/EventSource for Go.
 It is patterned after the [Go Websockets](https://code.google.com/p/go/source/browse/?repo=net#hg%2Fwebsocket) library.
 It is very much a work in progress. Pull requests welcome.
