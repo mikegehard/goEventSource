@@ -13,19 +13,15 @@ http://cjihrig.com/blog/the-server-side-of-server-sent-events/
 */
 
 type Conn struct {
-	writer         http.ResponseWriter
-	flusher        http.Flusher
-	closeNotifiter http.CloseNotifier
+	writer http.ResponseWriter
+	http.Flusher
+	http.CloseNotifier
 }
 
 func (c Conn) Write(message string) {
 	c.writer.Write([]byte(fmt.Sprintf("data: %s", message)))
 	c.writer.Write([]byte("\n\n"))
-	c.flusher.Flush()
-}
-
-func (c Conn) CloseNotify() <-chan bool {
-	return c.closeNotifiter.CloseNotify()
+	c.Flush()
 }
 
 type Handler func(*Conn)
