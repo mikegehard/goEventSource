@@ -6,38 +6,22 @@ It is very much a work in progress. Pull requests welcome.
 
 ## Example app
 
-Found in the examples directory. In order to run it, you will need to:
-
-1. Set your GOPATH to the examples directory.
+Found in the examples directory. You can run it from the examples directory with:
 
 ```
-  export GOPATH=`pwd`
-```
-
-1. Run the app.
-
-```
-go run src/main.go
+go run main.go
 ```
 
 
 ## Development
-
-1. Make sure your GOPATH is set to the root of the project.
-
-```
-  export GOPATH=`pwd`
-```
   
-1. Please write tests for any code that you add. To run existing tests:
+Please write tests for any code that you add. To run existing tests:
 
 ```
   bin/test
 ```
 
 ## References
-
-See `src/main.go` for an example of how to use this library.
 
 For more information about SSE/EventSource, see:
 
