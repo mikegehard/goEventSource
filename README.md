@@ -4,6 +4,23 @@ This library is an initial implementation of Server Sent Events(SSE)/EventSource
 It is patterned after the [Go Websockets](https://code.google.com/p/go/source/browse/?repo=net#hg%2Fwebsocket) library.
 It is very much a work in progress. Pull requests welcome.
 
+## Example app
+
+Found in the examples directory. In order to run it, you will need to:
+
+1. Set your GOPATH to the examples directory.
+
+```
+  export GOPATH=`pwd`
+```
+
+1. Run the app.
+
+```
+go run src/main.go
+```
+
+
 ## Development
 
 1. Make sure your GOPATH is set to the root of the project.
