@@ -1,10 +1,29 @@
 package eventsource
 
 import (
+	"net"
 	"net/http"
 	"net/http/httptest"
+	"net/http/httputil"
 	"testing"
+	"time"
 )
+
+type CloseNotifiterRecorder struct {
+	*httptest.ResponseRecorder
+}
+
+func NewCloseNotifierRecorder() *CloseNotifiterRecorder {
+	recorder := httptest.NewRecorder()
+	myRecorder := new(CloseNotifiterRecorder)
+	myRecorder.ResponseRecorder = recorder
+	return myRecorder
+}
+
+func (r CloseNotifiterRecorder) CloseNotify() <-chan bool {
+	channel := make(chan bool)
+	return channel
+}
 
 func TestServeHttpWritesTheProperHeaders(t *testing.T) {
 	req, err := http.NewRequest("GET", "http://example.com/foo", nil)
@@ -12,7 +31,7 @@ func TestServeHttpWritesTheProperHeaders(t *testing.T) {
 		t.Errorf("Failed to create request")
 	}
 
-	recorder := httptest.NewRecorder()
+	recorder := NewCloseNotifierRecorder()
 
 	eventHandler := func(es *Conn) {}
 
@@ -43,7 +62,7 @@ func TestServeHttpSetsResponseToOK(t *testing.T) {
 		t.Errorf("Failed to create request")
 	}
 
-	recorder := httptest.NewRecorder()
+	recorder := NewCloseNotifierRecorder()
 
 	eventHandler := func(es *Conn) {}
 
@@ -62,7 +81,7 @@ func TestServeHttpFlushes(t *testing.T) {
 		t.Errorf("Failed to create request")
 	}
 
-	recorder := httptest.NewRecorder()
+	recorder := NewCloseNotifierRecorder()
 
 	eventHandler := func(es *Conn) {}
 
@@ -75,9 +94,48 @@ func TestServeHttpFlushes(t *testing.T) {
 	}
 }
 
+func TestAllowsNotificationThatClientWentAway(t *testing.T) {
+	clientWentAway := make(chan bool)
+	eventHandler := func(es *Conn) {
+		clientWentAway <- <-es.CloseNotify()
+	}
+
+	server := httptest.NewServer(Handler(eventHandler))
+	defer server.Close()
+
+	tcpConn, err := net.Dial("tcp", server.Listener.Addr().String())
+	if err != nil {
+		t.Errorf("Error opening client connection: %s", err)
+	}
+
+	conn := httputil.NewClientConn(tcpConn, nil)
+	req, err := http.NewRequest("GET", "/", nil)
+	if err != nil {
+		t.Errorf("Error creating request: %s", err)
+	}
+
+	err = conn.Write(req)
+	if err != nil {
+		t.Errorf("Error writing request: %s", err)
+	}
+
+	err = conn.Close()
+	if err != nil {
+		t.Errorf("Could not close client connection: %s", err)
+	}
+
+	select {
+	case <-clientWentAway:
+		// test worked
+	case <-time.After(1 * time.Second):
+		t.Errorf("Never told that the client went away.")
+	}
+
+}
+
 func TestConnWritingAMessage(t *testing.T) {
 	recorder := httptest.NewRecorder()
-	connection := &Conn{recorder, recorder}
+	connection := &Conn{recorder, recorder, NewCloseNotifierRecorder()}
 
 	connection.Write("Hello World")
 

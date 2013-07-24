@@ -30,10 +30,15 @@ const homepageHtml = `
 var homepageTemplate = template.Must(template.New("home").Parse(homepageHtml))
 
 func eventHandler(es *eventsource.Conn) {
+	fmt.Println("Client connected.")
 	for {
 		select {
 		case <-time.After(2*time.Second):
-			es.Write("Hello world")
+			es.Write("Hello from the server!")
+			fmt.Println("Sent message.")
+		case <-es.CloseNotify():
+			fmt.Println("Client went away.")
+			return
 		}
 	}
 }
