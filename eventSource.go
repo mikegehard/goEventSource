@@ -1,16 +1,22 @@
+/*
+Package eventsouce provides a basic interface for
+serving server sent events (aka EventSource).
+
+It is patterned after the Go Websocket library:
+https://code.google.com/p/go/source/browse?repo=net#hg%2Fwebsocket
+
+For more destails about Server Sent Events see:
+http://html5doctor.com/server-sent-events/
+http://www.html5rocks.com/en/tutorials/eventsource/basics/
+http://cjihrig.com/blog/the-server-side-of-server-sent-events/
+*/
+
 package eventsource
 
 import (
 	"fmt"
 	"net/http"
 )
-
-/*
-See :
-http://html5doctor.com/server-sent-events/
-http://www.html5rocks.com/en/tutorials/eventsource/basics/
-http://cjihrig.com/blog/the-server-side-of-server-sent-events/
-*/
 
 type Conn struct {
 	writer http.ResponseWriter
